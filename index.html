@@ -65,7 +65,12 @@ box-shadow:0 25px 80px #0007;margin:16px 0}
 
 .secret{cursor:pointer;text-align:center;user-select:none}
 .secretText{max-height:0;overflow:hidden;opacity:0;transition:.8s ease}
-.secret.open .secretText{max-height:300px;opacity:1}
+..secret.open .secretText,
+.secretText.open{
+  max-height:300px;
+  opacity:1;
+}
+
 
 .random{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .random img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:21px;border:1px solid #fff1;transition:.8s}
