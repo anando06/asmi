@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#09060a">
+<title>For Asmi — A Little Piece of My Heart</title>
+<style>
+:root{
+  --bg:#09060a;--pink:#ff6f9d;--rose:#ffb2c9;--cream:#fff7fa;
+  --muted:#d7c4cd;--glass:rgba(255,255,255,.075);--line:rgba(255,255,255,.14)
+}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;min-height:100%;background:var(--bg);color:var(--cream);
+font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif}
+body{overflow-x:hidden}
+body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:20;
+background:radial-gradient(circle at 50% 50%,transparent 45%,rgba(0,0,0,.42) 100%)}
+button{font:inherit}
+#stars{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.star{position:absolute;bottom:-30px;opacity:0;animation:rise linear infinite}
+@keyframes rise{0%{transform:translateY(0) scale(.7);opacity:0}15%{opacity:.65}100%{transform:translateY(-115vh) rotate(260deg) scale(1.1);opacity:0}}
+
+#musicBtn{position:fixed;top:max(18px,env(safe-area-inset-top));right:18px;z-index:50;width:48px;height:48px;border-radius:50%;
+border:1px solid var(--line);background:rgba(15,8,14,.72);backdrop-filter:blur(18px);color:#fff;cursor:pointer;
+box-shadow:0 10px 35px #0007}
+#musicBtn.playing{box-shadow:0 0 0 5px #ff6f9d20,0 0 35px #ff6f9d55}
+#musicBtn span{display:inline-block}.playing span{animation:spin 2.5s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+#bar{position:fixed;top:0;left:0;height:2px;width:33.33%;background:var(--pink);z-index:60;box-shadow:0 0 15px var(--pink);transition:width .7s}
+
+.page{min-height:100svh;display:none;position:relative;z-index:1;padding:72px 18px 85px;align-items:center;justify-content:center}
+.page.active{display:flex;animation:cinema .8s cubic-bezier(.2,.8,.2,1)}
+@keyframes cinema{from{opacity:0;transform:scale(1.025) translateY(22px);filter:blur(5px)}to{opacity:1;transform:none;filter:none}}
+.wrap{width:min(760px,100%);text-align:center}
+.kicker{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--rose);margin-bottom:17px}
+h1{font-size:clamp(45px,13vw,92px);line-height:.9;letter-spacing:-3px;margin:0 0 18px}
+h2{font-size:clamp(30px,8vw,50px);line-height:.98;letter-spacing:-1.5px;margin:0 0 14px}
+p{font-size:16px;line-height:1.75;color:var(--muted)}
+.glow{text-shadow:0 0 35px #ff6f9d55}
+
+.hero-photo{width:100%;height:min(68svh,620px);object-fit:cover;border-radius:30px;display:block;
+border:1px solid var(--line);box-shadow:0 35px 100px #000b;filter:saturate(.92) contrast(1.03)}
+.photo-frame{position:relative;margin:0 auto 28px;width:min(560px,100%)}
+.photo-frame:before{content:"";position:absolute;inset:-1px;border-radius:31px;background:linear-gradient(135deg,#ffffff22,transparent 45%,#ff6f9d18);z-index:-1}
+.caption{position:absolute;left:18px;right:18px;bottom:18px;text-align:left;padding:15px 17px;border-radius:18px;
+background:linear-gradient(transparent,rgba(0,0,0,.82));padding-top:45px;font-size:12px;color:#fff}
+.type{min-height:86px;max-width:610px;margin:0 auto}
+.btns{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:24px}
+.btn{border:1px solid #ffffff16;color:white;background:linear-gradient(135deg,#ff6f9d,#bd356a);padding:14px 23px;
+border-radius:999px;font-weight:750;cursor:pointer;box-shadow:0 14px 40px #ff477c2c;transition:.25s}
+.btn:active{transform:scale(.97)}
+.btn.alt{background:#ffffff0a;box-shadow:none}
+
+.glass{padding:23px;border:1px solid var(--line);background:var(--glass);border-radius:27px;backdrop-filter:blur(18px);
+box-shadow:0 25px 80px #0007;margin:16px 0}
+.memory{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.memory figure{margin:0;overflow:hidden;border-radius:21px;background:#fff8;border:1px solid #fff1;position:relative}
+.memory img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;transition:transform .8s ease,filter .8s ease}
+.memory figure:hover img{transform:scale(1.06);filter:brightness(1.08)}
+.memory figcaption{padding:10px 11px;text-align:left;font-size:11px;color:#d8c5ce}
+
+.apology{text-align:left;display:flex;gap:14px}.emoji{font-size:27px;line-height:1}.apology strong{display:block;margin-bottom:5px}.apology span{color:var(--muted);line-height:1.65;font-size:14px}
+
+.secret{cursor:pointer;text-align:center;user-select:none}
+.secretText{max-height:0;overflow:hidden;opacity:0;transition:.8s ease}
+.secret.open .secretText{max-height:300px;opacity:1}
+
+.random{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.random img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:21px;border:1px solid #fff1;transition:.8s}
+.random img:first-child{transform:rotate(-1.2deg)}.random img:last-child{transform:rotate(1.2deg)}
+
+.bigheart{font-size:72px;animation:pulse 1.25s infinite;filter:drop-shadow(0 0 18px #ff4f8b66)}
+@keyframes pulse{50%{transform:scale(1.1)}}
+.quote{font-size:21px;line-height:1.55;color:#fff;font-weight:650}
+
+.music-note{font-size:11px;color:#a9909b}
+audio{width:100%;margin-top:8px}
+
+.dots{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:50;display:flex;gap:8px;
+padding:8px 11px;border-radius:99px;background:#130b13cc;border:1px solid var(--line);backdrop-filter:blur(18px)}
+.dot{width:8px;height:8px;border-radius:50%;background:#6d5260;transition:.4s}.dot.on{background:var(--pink);box-shadow:0 0 13px var(--pink)}
+
+.burst{position:fixed;z-index:100;pointer-events:none;font-size:20px;transition:1.8s cubic-bezier(.1,.7,.2,1)}
+.small{font-size:11px;color:#a9909b}
+
+@media(max-width:520px){
+  .page{padding-left:13px;padding-right:13px}
+  .hero-photo{height:59svh;border-radius:24px}.photo-frame:before{border-radius:25px}
+  .glass{padding:18px}.memory,.random{gap:9px}
+  h1{letter-spacing:-2px}
+}
+</style>
+</head>
+
+<body>
+<div id="stars"></div>
+<div id="bar"></div>
+
+<!-- =========================================================
+     MUSIC BUTTON
+     Put your legally obtained audio file in this folder and
+     name it: cant-fall-in-love.mp3
+     ========================================================= -->
+<audio id="song" loop preload="metadata">
+  <source src="cant-fall-in-love.mp3" type="audio/mpeg">
+</audio>
+
+<button id="musicBtn" aria-label="Play music" title="Play music">
+  <span>♫</span>
+</button>
+
+
+<!-- =========================================================
+     PAGE 1 — HERO
+     ========================================================= -->
+<section class="page active" id="page1">
+  <div class="wrap">
+
+    <div class="kicker">A little piece of my heart</div>
+
+    <!-- CHANGE THIS FILE NAME IF NEEDED -->
+    <div class="photo-frame">
+      <img class="hero-photo" src="photo1.jpeg" alt="Asmi and me">
+      <div class="caption">Somehow, this picture still feels like home.</div>
+    </div>
+
+    <h1 class="glow">Asmi,<br>I'm sorry. ❤️</h1>
+
+    <p class="type" id="typing"></p>
+
+    <div class="btns">
+      <button class="btn" id="to2">Take me to the next page →</button>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- =========================================================
+     PAGE 2 — MEMORIES + APOLOGY
+     ========================================================= -->
+<section class="page" id="page2">
+  <div class="wrap">
+
+    <div class="kicker">Chapter two · us</div>
+
+    <h2>The little things<br>I don't want to forget.</h2>
+
+    <p>Before saying what I'm sorry for, I wanted to remember some of the moments that made our story special.</p>
+
+    <div class="memory">
+
+      <figure>
+        <img src="photo2.jpeg" alt="A memory">
+        <figcaption>A memory I'll always smile about.</figcaption>
+      </figure>
+
+      <figure>
+        <img src="photo3.jpeg" alt="A memory">
+        <figcaption>A tiny piece of our story. ❤️</figcaption>
+      </figure>
+
+    </div>
+
+    <div class="glass">
+      <div class="apology">
+        <div class="emoji">🥺</div>
+        <div>
+          <strong>I'm sorry for the moments I made you feel pressured.</strong>
+          <span>I never wanted my feelings to become something heavy on your heart. You deserve room to breathe and be yourself.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="glass">
+      <div class="apology">
+        <div class="emoji">🫶</div>
+        <div>
+          <strong>I'm sorry for the times fear spoke louder than trust.</strong>
+          <span>Sometimes the thought of losing you made me react from fear instead of giving you the calm, trust and understanding you deserved.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="glass secret" id="secret">
+      🔒 <strong>Tap this for something I couldn't say normally</strong>
+      <div class="secretText">
+        <p class="quote">My biggest apology isn't just “sorry.” It's wishing I had understood sooner that loving someone should make them feel safe, not trapped.</p>
+      </div>
+    </div>
+
+    <div class="btns">
+      <button class="btn alt" id="back1">← Back</button>
+      <button class="btn" id="to3">There's one more page →</button>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- =========================================================
+     PAGE 3 — PERSONAL ENDING
+     ========================================================= -->
+<section class="page" id="page3">
+  <div class="wrap">
+
+    <div class="kicker">Chapter three · just for Asmi</div>
+
+    <h2>And then…<br><span class="glow">there's you.</span></h2>
+
+    <div class="random">
+      <img src="photo4.jpeg" alt="Asmi">
+      <img src="photo5.jpeg" alt="Asmi">
+    </div>
+
+    <div class="glass">
+      <div class="bigheart">❤️</div>
+      <p class="quote">“I don't want this apology to make you feel guilty. I just want it to show that I listened, I understood, and I genuinely want to do better.”</p>
+    </div>
+
+    <div class="glass">
+      <h2 style="font-size:29px">No pressure.<br>Just honesty.</h2>
+      <p>I won't ask you to forget everything overnight. I won't ask you to answer before you're ready. I just wanted to put my heart into words for you.</p>
+    </div>
+
+    <div class="glass">
+      <h2 style="font-size:29px">🎵 Can't Fall in Love</h2>
+      <p class="small">Our little soundtrack.</p>
+      <audio controls preload="none">
+        <source src="cant-fall-in-love.mp3" type="audio/mpeg">
+      </audio>
+      <p class="music-note">If the song doesn't play, put your MP3 file beside this HTML and name it <b>cant-fall-in-love.mp3</b>.</p>
+    </div>
+
+    <div class="glass" id="finalCard">
+      <h2 style="font-size:29px">One last thing…</h2>
+      <button class="btn" id="finalButton">Open my last message ❤️</button>
+
+      <div class="secretText" id="finalMessage">
+        <p class="quote">
+          Asmi, thank you for every laugh, every memory, every silly conversation,
+          and every little moment that became part of our story.
+          I'm genuinely sorry for the moments I hurt you.
+          I hope that whatever happens, you remember that I cared about you deeply.
+        </p>
+        <div class="bigheart">💗</div>
+      </div>
+    </div>
+
+    <div class="btns">
+      <button class="btn alt" id="back2">← Read again</button>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- =========================================================
+     PAGE DOTS
+     ========================================================= -->
+<div class="dots">
+  <div class="dot on" id="dot1"></div>
+  <div class="dot" id="dot2"></div>
+  <div class="dot" id="dot3"></div>
+</div>
+
+
+<script>
+
+/* =========================================================
+   PAGE NAVIGATION
+   ========================================================= */
+
+const pages = [
+  document.getElementById("page1"),
+  document.getElementById("page2"),
+  document.getElementById("page3")
+];
+
+const dots = [
+  document.getElementById("dot1"),
+  document.getElementById("dot2"),
+  document.getElementById("dot3")
+];
+
+const bar = document.getElementById("bar");
+
+let currentPage = 0;
+
+function showPage(number) {
+
+  if (number < 0 || number > 2) return;
+
+  pages.forEach((page, index) => {
+    page.classList.toggle("active", index === number);
+  });
+
+  dots.forEach((dot, index) => {
+    dot.classList.toggle("on", index === number);
+  });
+
+  bar.style.width =
+    ((number + 1) * 33.333) + "%";
+
+  currentPage = number;
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+}
+
+document.getElementById("to2").addEventListener("click", () => {
+  showPage(1);
+});
+
+document.getElementById("back1").addEventListener("click", () => {
+  showPage(0);
+});
+
+document.getElementById("to3").addEventListener("click", () => {
+  showPage(2);
+});
+
+document.getElementById("back2").addEventListener("click", () => {
+  showPage(1);
+});
+
+
+/* =========================================================
+   SECRET MESSAGE
+   ========================================================= */
+
+document.getElementById("secret").addEventListener("click", function() {
+  this.classList.toggle("open");
+});
+
+
+/* =========================================================
+   FINAL MESSAGE + HEART BURST
+   ========================================================= */
+
+document.getElementById("finalButton").addEventListener("click", function() {
+
+  document.getElementById("finalCard").classList.add("open");
+
+  heartBurst();
+
+});
+
+
+function heartBurst() {
+
+  const symbols = ["❤️","💗","💕","✨","♡"];
+
+  for (let i = 0; i < 35; i++) {
+
+    const heart = document.createElement("div");
+
+    heart.className = "burst";
+
+    heart.textContent =
+      symbols[Math.floor(Math.random() * symbols.length)];
+
+    heart.style.left =
+      (45 + Math.random() * 10) + "%";
+
+    heart.style.top = "58%";
+
+    document.body.appendChild(heart);
+
+    requestAnimationFrame(() => {
+
+      heart.style.transform =
+        `translate(
+          ${(Math.random() - .5) * 600}px,
+          ${-150 - Math.random() * 500}px
+        )
+        rotate(${Math.random() * 360}deg)`;
+
+      heart.style.opacity = "0";
+
+    });
+
+    setTimeout(() => heart.remove(), 1900);
+
+  }
+}
+
+
+/* =========================================================
+   TYPEWRITER
+   ========================================================= */
+
+const message =
+"I know a simple “sorry” can never explain everything I feel. So I made this little place to say the things I sometimes fail to say properly.";
+
+let position = 0;
+
+function typeWriter() {
+
+  const target =
+    document.getElementById("typing");
+
+  if (position <= message.length) {
+
+    target.textContent =
+      message.substring(0, position);
+
+    position++;
+
+    setTimeout(typeWriter, 27);
+
+  }
+
+}
+
+typeWriter();
+
+
+/* =========================================================
+   MUSIC BUTTON
+   ========================================================= */
+
+const song =
+  document.getElementById("song");
+
+const musicBtn =
+  document.getElementById("musicBtn");
+
+
+musicBtn.addEventListener("click", async function() {
+
+  try {
+
+    if (song.paused) {
+
+      await song.play();
+
+      musicBtn.classList.add("playing");
+
+    } else {
+
+      song.pause();
+
+      musicBtn.classList.remove("playing");
+
+    }
+
+  } catch (error) {
+
+    alert(
+      "Add cant-fall-in-love.mp3 beside index.html first."
+    );
+
+  }
+
+});
+
+
+song.addEventListener("play", () => {
+  musicBtn.classList.add("playing");
+});
+
+song.addEventListener("pause", () => {
+  musicBtn.classList.remove("playing");
+});
+
+
+/* =========================================================
+   BACKGROUND PARTICLES
+   ========================================================= */
+
+const stars =
+  document.getElementById("stars");
+
+for (let i = 0; i < 28; i++) {
+
+  const element =
+    document.createElement("div");
+
+  element.className =
+    "star";
+
+  element.textContent =
+    Math.random() > .5
+      ? "♡"
+      : "✦";
+
+  element.style.left =
+    Math.random() * 100 + "%";
+
+  element.style.fontSize =
+    (10 + Math.random() * 19) + "px";
+
+  element.style.animationDuration =
+    (7 + Math.random() * 10) + "s";
+
+  element.style.animationDelay =
+    (-Math.random() * 12) + "s";
+
+  stars.appendChild(element);
+
+}
+
+
+/* =========================================================
+   OPTIONAL: SWIPE BETWEEN PAGES ON PHONE
+   ========================================================= */
+
+let touchStartX = 0;
+
+document.addEventListener("touchstart", function(event) {
+
+  touchStartX =
+    event.changedTouches[0].screenX;
+
+}, {passive:true});
+
+
+document.addEventListener("touchend", function(event) {
+
+  const touchEndX =
+    event.changedTouches[0].screenX;
+
+  const difference =
+    touchEndX - touchStartX;
+
+  if (Math.abs(difference) < 70) return;
+
+  if (difference < 0 && currentPage < 2) {
+
+    showPage(currentPage + 1);
+
+  }
+
+  if (difference > 0 && currentPage > 0) {
+
+    showPage(currentPage - 1);
+
+  }
+
+}, {passive:true});
+
+</script>
+
+</body>
+</html>
